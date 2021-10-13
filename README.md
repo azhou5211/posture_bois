@@ -1,2 +1,2 @@
-# super-duper-garbanzo
+# Posture Bois
 A project for fun.
