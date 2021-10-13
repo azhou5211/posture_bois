@@ -18,3 +18,7 @@ pandas
 flask
 flask_restful
 httpie
+torch
+torchvision
+opencv-python
+mediapipe
