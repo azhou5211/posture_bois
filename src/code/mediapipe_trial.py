@@ -25,7 +25,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         # Extract landmarks
         if results.pose_landmarks:
             landmarks = results.pose_landmarks.landmark
-            print(landmarks)
+            # print(landmarks)
         
         # Render detections
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
@@ -35,7 +35,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         cv2.imshow('Mediapipe Feed', image)
 
-        if cv2.waitKey(2) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     cap.release()
