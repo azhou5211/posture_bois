@@ -22,3 +22,4 @@ torch
 torchvision
 opencv-python
 mediapipe
+azure-cli
