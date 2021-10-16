@@ -6,15 +6,15 @@ import numpy as np
 
 class poseCalculations:
     # this is a class containing various functions to do with positioning
-
-    def __init__(self) -> None:
-        pass
+    def __init__(self, data) -> None:
+        self.df = data
 
 
     # IN: filePath = path to csv file
     # OUT: DataFrame with rows as frames of video, columns multiindex by vector name and dimensions. Eg l_forearm -> x, y, z 
-    def process_file(filePath):
-        raw_data = pd.read_csv(filePath).drop(columns = ['Unnamed: 0'])
+    def process_file(self, filePath):
+        #raw_data = pd.read_csv(filePath).drop(columns = ['Unnamed: 0'])
+        raw_data = self.df.copy()
 
         # Parse strings
         strToArr = lambda s : np.array([float(k) for k in s.replace("(", "").replace(")",'').replace(" ", "").split(',')[0:3]])
@@ -28,7 +28,7 @@ class poseCalculations:
 
     # this functition calculates the vector between two adjacent points for every 'cut' of human
     # this function takes in our original landmark data (point data)    
-    def points_to_vectors(pos_data):
+    def points_to_vectors(self, pos_data):
         
         vector_df = pd.DataFrame()
         
@@ -69,13 +69,13 @@ class poseCalculations:
     # IN: Dataframe of vectors, with multi-indexed column
     # OUT: Dataframe in same format, but each vector is normalized. Default l2
 
-    def normalize(df, scaler=Normalizer(norm='l2')):
+    def normalize(self, df, scaler=Normalizer(norm='l2')):
         df_scaled = df.groupby(level=0, axis=1).apply(lambda x : pd.DataFrame(scaler.fit_transform(x), columns=x.columns, index=x.index))
         return df_scaled
 
     # IN: Normalized dataframe from trainer videos
     # OUT: Function that takes array, transforms and trims
-    def trainer_pca_transformer(df, target_variance = 0.9):
+    def trainer_pca_transformer(self, df, target_variance = 0.9):
         pca = PCA()
         pca.fit(df)
 
@@ -88,11 +88,11 @@ class poseCalculations:
         return lambda x: pca.transform([x])[:,:n]
 
     # function that compares two vectors using cosine similarity
-    def cosine_sim(vec1, vec2):
+    def cosine_sim(self, vec1, vec2):
         return np.dot(vec1, vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2))
 
     # This function compares the goal pose(trainer's) to the students current pose
-    def compare_poses(teacher_pose, student_pose, transform=None, sim = cosine_sim):  
+    def compare_poses(self, teacher_pose, student_pose, transform=None, sim = cosine_sim):  
         if transform:
             teacher_pose = transform(teacher_pose)[0]
             student_pose = transform(student_pose)[0]
@@ -100,8 +100,8 @@ class poseCalculations:
         return sim(teacher_pose, student_pose)
 
 
-    # KNN for identifying important poses
-    def extract_key_poses(pose_df, frames_per_pose=10, min_frames=5):
+    # KNN for identifying trainer's important poses
+    def extract_key_poses(self, pose_df, frames_per_pose=10, min_frames=5):
         kmeans = KMeans(n_clusters=len(pose_df) // frames_per_pose).fit(pose_df)
         labels = np.array(kmeans.labels_)
         label_count = np.array([(labels == i).sum() for i in range(kmeans.n_clusters)])
