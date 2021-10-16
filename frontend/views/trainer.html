@@ -4,4 +4,15 @@
 
 <h1>Welcome Trainer!</h1>
 
+{% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+{% endif %}
+
+<form action="" method="post" enctype="multipart/form-data">
+  <input type="file" id="myFile" name="file" accept=".mp4,.avi,.mov,.flv">
+  <input type="submit">
+</form>
+
 {% endblock %}
