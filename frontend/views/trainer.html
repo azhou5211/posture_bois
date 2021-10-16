@@ -15,4 +15,10 @@
   <input type="submit">
 </form>
 
+{% if success %}
+        <div class="alert alert-success">
+            {{ success }}
+        </div>
+{% endif %}
+
 {% endblock %}
