@@ -72,12 +72,11 @@ def posture_matching():
             return render_template("trainer.html", success="File successfully uploaded")
         else:
             return render_template("trainer.html", error="File type is not video. Accepted video formats: mp4, avi, mov, flv")
-
     return render_template("trainer.html")
 
 
 @app.route('/student')
-def iposture_tracking():
+def posture_tracking():
     """Video streaming"""
     return render_template('student.html')
 
