@@ -90,9 +90,23 @@ def compare_poses(teacher_pose, student_pose, transform=None, sim = cosine_sim):
         
     return sim(teacher_pose, student_pose)
 
+# KNN for identifying poses
+from sklearn.cluster import KMeans
+def extract_key_poses(pose_df, frames_per_pose=10, min_frames=5):
+    kmeans = KMeans(n_clusters=len(pose_df) // frames_per_pose).fit(pose_df)
+    labels = np.array(kmeans.labels_)
+    label_count = np.array([(labels == i).sum() for i in range(kmeans.n_clusters)])
+    extracted_poses = kmeans.cluster_centers_[np.where(label_count > min_frames)]
+
+    # Repackage in dataframe
+    return pd.DataFrame(extracted_poses, columns=pose_df.columns)
+
+
 # Example
 if __name__ == "__main__":
     df = process_file('landmark_data_tennis.csv')
     pca_transform = get_pca_transformer(df)
-    print(compare_poses(df.iloc[0,:], df.iloc[1,:], transform=pca_transform))
-    print(compare_poses(df.iloc[0,:], df.iloc[-1,:], transform=pca_transform))
+    key_poses = extract_key_poses(df)
+
+    for i, pose in df.iterrows():
+        print(compare_poses(key_poses.iloc[0,:], pose, transform=pca_transform))
