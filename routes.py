@@ -6,3 +6,12 @@ import json
 @app.route("/")
 def homepage():
     return render_template("home.html")
+
+@app.route("/trainer")
+def posture_matching():
+    return render_template("trainer.html")
+
+@app.route("/student")
+def posture_tracking():
+    return render_template("student.html")
+
