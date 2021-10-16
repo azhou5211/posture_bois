@@ -4,6 +4,7 @@ import mediapipe as mp
 import os
 import cv2
 from werkzeug.utils import secure_filename
+from src.utils.get_data import LabelExtractor
 
 
 def track_video():
@@ -69,6 +70,11 @@ def posture_matching():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # TODO: Extract data here and call function for pose
+
+
+
             return render_template("trainer.html", success="File successfully uploaded")
         else:
             return render_template("trainer.html", error="File type is not video. Accepted video formats: mp4, avi, mov, flv")
