@@ -59,13 +59,13 @@ class LabelExtractor:
 
             #print(landmarks_data)
             self.df = pd.DataFrame(landmarks_data, columns=np.arange(33))
-
-            #save dataframe 
-            self.df.to_csv("landmark_frame_data.csv", index=False)
             cap.release()
             cv2.destroyAllWindows()
 
-        print(len(landmarks))
-
-le = LabelExtractor("./tennis_serve.mp4")
-le.extract_landmarks()
+    def save_csv(self, file_path="landmark_frame_data.csv"):
+        """
+        Function to save csv
+        :param file_path: filepath to save csv
+        :return: None
+        """
+        self.df.to_csv(file_path, index=False)
