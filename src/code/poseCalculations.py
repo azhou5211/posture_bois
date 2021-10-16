@@ -62,7 +62,6 @@ class poseCalculations:
 
     # PCA on normalized vectors to determine which columns are most important and should be weighted more for 
     # similarity calculation
-
     def similarity_rule(expanded_trainer_data, target_variance = 0.9, n_components = 15):
         #target_variance = 0.9
         pca = PCA(n_components=n_components)
@@ -74,3 +73,22 @@ class poseCalculations:
         n = min(np.where(cumulative_total >= target_variance)[0])
         
         return pca, n
+
+
+    # This function measures the cosine similarity between two vectors (teacher_pose and student_pose)
+    # Used in our comparison function to return a score
+    def cosine_sim(vec1, vec2):
+        return np.dot(vec1, vec2)/(np.linalg.norm(vec1)*np.linalg.norm(vec2))
+    
+    
+    # This function allows us to compare the two poses and measure their similarity
+    # We transform the vectors based on PCA that explains a certain percentage of the variance
+    def compare_poses(teacher_pose, student_pose, pca=None, n_components=5, sim = cosine_sim):  
+        teacher_expanded = teacher_pose.apply(pd.Series).stack().reset_index(drop=True).values.reshape(1,-1)
+        student_expanded = student_pose.apply(pd.Series).stack().reset_index(drop=True).values.reshape(1,-1)
+
+        if pca:
+            teacher_expanded = pca.transform(teacher_expanded)[0][:n_components]
+            student_expanded = pca.transform(student_expanded)[0][:n_components]
+            
+        return sim(teacher_expanded, student_expanded)
