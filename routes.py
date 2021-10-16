@@ -1,7 +1,6 @@
 from flask.templating import render_template
 from flask import session, request, redirect, url_for, flash, Flask, render_template, render_template_string, Response
 from app import app
-# from src.utils.get_data import *
 import mediapipe as mp
 import json
 import cv2
@@ -44,7 +43,6 @@ def track_video():
             
     cap.release()
     cv2.destroyAllWindows()
-    video_capture.release()
 
 @app.route("/")
 def homepage():
