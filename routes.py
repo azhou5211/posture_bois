@@ -60,6 +60,7 @@ def posture_matching():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         if file.filename == '':
