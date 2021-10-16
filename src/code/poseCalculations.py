@@ -1,4 +1,5 @@
 from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 from sklearn.preprocessing import Normalizer
 import pandas as pd
 import numpy as np
@@ -98,8 +99,8 @@ class poseCalculations:
             
         return sim(teacher_pose, student_pose)
 
+
     # KNN for identifying important poses
-    from sklearn.cluster import KMeans
     def extract_key_poses(pose_df, frames_per_pose=10, min_frames=5):
         kmeans = KMeans(n_clusters=len(pose_df) // frames_per_pose).fit(pose_df)
         labels = np.array(kmeans.labels_)
