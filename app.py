@@ -1,4 +1,3 @@
-
 from flask import (
     Flask,
     request,
@@ -13,21 +12,16 @@ from flask import (
     g,
 )
 
+from config import Config
+
 # Initialize and config app
 app = Flask(__name__, static_folder="frontend/static", template_folder="frontend/views")
 
-@app.route("/")
-def homepage():
-    return serveInFrame("home.html")
+app.config.from_object(Config)
 
-# Frame wrapper
-def serveInFrame(contentHtml, **kwargs):
-    return render_template(
-        "frame.html",
-        content=contentHtml,
-        **kwargs,
-    )
+import routes
 
 if __name__ == "__main__":
     app.debug = True
     app.run()
+
