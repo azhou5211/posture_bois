@@ -68,7 +68,7 @@ def posture_matching():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return render_template("trainer.html")
+            return render_template("trainer.html", success="File successfully uploaded")
         else:
             return render_template("trainer.html", error="File type is not video. Accepted video formats: mp4, avi, mov, flv")
 
