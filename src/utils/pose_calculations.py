@@ -17,9 +17,6 @@ class PoseCalculations:
     # IN: filePath = path to csv file
     # OUT: DataFrame with rows as frames of video, columns multiindex by vector name and dimensions. Eg l_forearm -> x, y, z 
     def process_file(self):
-
-        print(self.raw_df)
-
         # strToArr = lambda s: np.array(
         #     [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]]
         # )
@@ -131,13 +128,12 @@ class PoseCalculations:
         
         # Save indices
         self.pose_idx = np.where(label_count > min_frames)[0]
-        print(self.pose_idx)
 
     def get_key_poses(self, raw=False):
         if raw:
-            return self.raw_df.iloc[self.pose_idx,:]
+            return self.raw_df.iloc[self.pose_idx,:].reset_index(drop=True)
         else:
-            return self.normalized_df.iloc[self.pose_idx,:]
+            return self.normalized_df.iloc[self.pose_idx,:].reset_index(drop=True)
 
 
 

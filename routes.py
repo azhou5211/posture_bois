@@ -52,7 +52,11 @@ def track_video():
 
 
                 if pc_parent.pose_idx is not None and pc_student.normalized_df is not None:
-                    comparison = PoseCalculations.compare_poses(pc_parent.get_key_poses()[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
+                    print(pc_parent.get_key_poses().iloc[pose_iterator, :].shape)
+                    print(pc_parent.get_key_poses().iloc[pose_iterator, :])
+                    print(pc_student.normalized_df.shape)
+                    print(pc_student.normalized_df)
+                    comparison = PoseCalculations.compare_poses(pc_parent.get_key_poses().iloc[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
                     print(comparison)
                     if comparison > 0.85:
                         pose_iterator+=1
@@ -108,6 +112,7 @@ def posture_matching():
             pc_parent.extract_key_poses()
 
             #### print knn poses on the carousel 
+            # USE 
 
 
             return render_template("trainer.html", success="File successfully uploaded")
