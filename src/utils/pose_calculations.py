@@ -21,12 +21,15 @@ class PoseCalculations:
         # strToArr = lambda s: np.array(
         #     [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]])
         # self.parsed_data = raw_data.applymap(strToArr)
+        strToArr = lambda s: np.array([float(k) for k in s[0:3]])
+        self.df = self.df.applymap(strToArr)
 
         # Convert to vectors
         vectorDf = self.points_to_vectors()
 
         # Normalize
-        return self.normalize(vectorDf)
+        self.normalized_df = self.normalize(vectorDf)
+        return self.normalized_df
 
     # this functition calculates the vector between two adjacent points for every 'cut' of human
     # this function takes in our original landmark data (point data)    
@@ -72,8 +75,7 @@ class PoseCalculations:
     def normalize(self, df, scaler=Normalizer(norm='l2')):
         df_scaled = df.groupby(level=0, axis=1).apply(
             lambda x: pd.DataFrame(scaler.fit_transform(x), columns=x.columns, index=x.index))
-        self.normalized_df = df_scaled
-        return self.normalized_df
+        return df_scaled
 
     # IN: Normalized dataframe from trainer videos
     # OUT: Function that takes array, transforms and trims

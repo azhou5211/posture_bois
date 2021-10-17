@@ -40,7 +40,7 @@ class LabelExtractor:
                         # print(landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x)
                         row = []
                         for id, lm in enumerate(results.pose_landmarks.landmark):
-                            row.append((lm.x, lm.y, lm.z, lm.visibility))
+                            row.append([lm.x, lm.y, lm.z, lm.visibility])
                     landmarks_data.append(row)
                 
                 # Render detections
@@ -57,8 +57,10 @@ class LabelExtractor:
                 else:
                     break
 
+            #landmarks_data = np.array(landmarks_data)
             #print(landmarks_data)
             self.df = pd.DataFrame(landmarks_data, columns=np.arange(33))
+            #print(self.df)
             cap.release()
             cv2.destroyAllWindows()
 

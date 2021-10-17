@@ -5,6 +5,7 @@ import os
 import cv2
 from werkzeug.utils import secure_filename
 from src.utils.get_data import LabelExtractor
+from src.utils.pose_calculations import PoseCalculations
 
 
 def track_video():
@@ -72,8 +73,10 @@ def posture_matching():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             # TODO: Extract data here and call function for pose
-
-
+            le = LabelExtractor('uploads/' + filename)
+            le.extract_landmarks()
+            pc = PoseCalculations(le.df)
+            pc.process_file()
 
             return render_template("trainer.html", success="File successfully uploaded")
         else:
