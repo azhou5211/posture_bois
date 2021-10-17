@@ -26,11 +26,12 @@ class PoseCalculations:
         #     [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]])
         # self.parsed_data = raw_data.applymap(strToArr)
         # print("First Check", self.df)
+        print("SELFF1:", self.df)
 
         strToArr = lambda s: np.array([float(k) for k in s[0:3]])
         self.df = self.df.applymap(strToArr)
 
-        print("SELFFF:", self.df)
+        print("SELFFF2:", self.df)
 
         # Convert to vectors
         vectorDf = self.points_to_vectors()
