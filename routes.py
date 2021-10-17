@@ -45,27 +45,27 @@ def track_video():
                     row.append((lm.x, lm.y, lm.z, lm.visibility))
                 landmarks_data.append(row)
 
-            pc_student = PoseCalculations(data = pd.DataFrame(landmarks_data))
+                pc_student = PoseCalculations(data = pd.DataFrame(landmarks_data))
 
-            # le_student = LabelExtractor(None)
-            pc_student.process_file()
+                # le_student = LabelExtractor(None)
+                pc_student.process_file()
 
 
-            if pc_parent.poses is not None and pc_student.normalized_df is not None:
-                comparison = PoseCalculations.compare_poses(pc_parent.poses.iloc[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
-                print(comparison)
-                if comparison > 0.85:
-                    pose_iterator+=1
-        
-            # Render detections
-            mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                    mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
-                                    mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
-                                    )               
+                if pc_parent.pose_idx is not None and pc_student.normalized_df is not None:
+                    comparison = PoseCalculations.compare_poses(pc_parent.get_key_poses()[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
+                    print(comparison)
+                    if comparison > 0.85:
+                        pose_iterator+=1
             
-            cv2.imwrite('t.jpg', image)
+                # Render detections
+                mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                                        mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
+                                        mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
+                                        )               
+                
+                cv2.imwrite('t.jpg', image)
 
-            yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
+                yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             
