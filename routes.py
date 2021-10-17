@@ -50,17 +50,18 @@ def track_video():
                     #print('RRRRRRRRRRow:', row)
                 landmarks_data.append(row)
 
-            #print('Landmark Student 1111111111:', landmarks_data)
-
                 pc_student = PoseCalculations(data = pd.DataFrame(landmarks_data))
+
+                # le_student = LabelExtractor(None)
+                pc_student.process_file()
 
                 # le_student = LabelExtractor(None)
                 #print("check on route1:", pc_student.df)
                 pc_student.process_file()
                 # print("check on route1:", pc_student.df)
 
-                if pc_parent.poses is not None and pc_student.normalized_df is not None:
-                    comparison = PoseCalculations.compare_poses(pc_parent.poses.iloc[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
+                if pc_parent.pose_idx is not None and pc_student.normalized_df is not None:
+                    comparison = PoseCalculations.compare_poses(pc_parent.get_key_poses()[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
                     print(comparison)
                     if comparison > 0.85:
                         pose_iterator+=1
@@ -74,8 +75,8 @@ def track_video():
                 cv2.imwrite('t.jpg', image)
 
                 yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
             
     cap.release()
     cv2.destroyAllWindows()
@@ -110,7 +111,7 @@ def posture_matching():
             le_parent.input_file_path = "uploads/"+filename
             le_parent.extract_landmarks()
 
-            pc_parent.df = le_parent.df
+            pc_parent.raw_df = le_parent.df
             pc_parent.process_file()
             pc_parent.trainer_pca_transformer()
             pc_parent.extract_key_poses()
