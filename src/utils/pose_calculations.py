@@ -23,7 +23,7 @@ class poseCalculations:
         # Convert to vectors
         vectorDf = points_to_vectors(parsed_data)
 
-        # NOrmalize
+        # Normalize
         return normalize(vectorDf)
 
     # this functition calculates the vector between two adjacent points for every 'cut' of human
