@@ -37,12 +37,17 @@ def track_video():
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             
             # Extract landmarks
+            #print("Upwards check:", results)
+
             if results.pose_landmarks:
                 landmarks = results.pose_landmarks.landmark
                 # print(landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x)
                 row = []
                 for id, lm in enumerate(results.pose_landmarks.landmark):
                     row.append((lm.x, lm.y, lm.z, lm.visibility))
+
+
+                    #print('RRRRRRRRRRow:', row)
                 landmarks_data.append(row)
 
                 pc_student = PoseCalculations(data = pd.DataFrame(landmarks_data))
@@ -50,6 +55,10 @@ def track_video():
                 # le_student = LabelExtractor(None)
                 pc_student.process_file()
 
+                # le_student = LabelExtractor(None)
+                #print("check on route1:", pc_student.df)
+                pc_student.process_file()
+                # print("check on route1:", pc_student.df)
 
                 if pc_parent.pose_idx is not None and pc_student.normalized_df is not None:
                     print(pc_parent.get_key_poses().iloc[pose_iterator, :].shape)
