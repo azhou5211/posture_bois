@@ -8,36 +8,28 @@ import numpy as np
 class PoseCalculations:
     # this is a class containing various functions to do with positioning
     def __init__(self, data=None) -> None:
-        self.df = data
+        self.raw_df = data
         self.normalized_df = None
         self.pca_model = None
-        self.poses = None
-        self.expanded_df = None
+        self.pose_idx = None
+
 
     # IN: filePath = path to csv file
     # OUT: DataFrame with rows as frames of video, columns multiindex by vector name and dimensions. Eg l_forearm -> x, y, z 
     def process_file(self):
 
-        # raw_data = pd.read_csv(filePath).drop(columns = ['Unnamed: 0'])
-        # raw_data = self.df.copy()
-
-        # Parse strings
-        # strToArr = lambda s: np.array(
-        #     [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]])
-        # self.parsed_data = raw_data.applymap(strToArr)
-        # print("First Check", self.df)
-
-        strToArr = lambda s: np.array([float(k) for k in s[0:3]])
-        self.df = self.df.applymap(strToArr)
-
-        print("SELFFF:", self.df)
+        strToArr = strToArr = lambda s: np.array(
+            [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]]
+        )
+        self.raw_df = self.raw_df.applymap(strToArr)
 
         # Convert to vectors
         vectorDf = self.points_to_vectors()
 
-        # print("VECTORRRR:",vectorDf)
         # Normalize
         self.normalized_df = self.normalize(vectorDf)
+
+
         return self.normalized_df
 
     # this functition calculates the vector between two adjacent points for every 'cut' of human
@@ -49,26 +41,26 @@ class PoseCalculations:
         # vector_df['time'] = self.parsed_data['time']
 
         # indicies are hardcoded based on adjacent points
-        print("STUDENT :", self.df)
+
         # left side vectors
-        vector_df['l_forearm'] = self.df.iloc[:, 15] - self.df.iloc[:, 13]
-        vector_df['l_upperarm'] = self.df.iloc[:, 13] - self.df.iloc[:, 11]
-        vector_df['l_flank'] = self.df.iloc[:, 11] - self.df.iloc[:, 23]
-        vector_df['l_thigh'] = self.df.iloc[:, 23] - self.df.iloc[:, 25]
-        vector_df['l_shin'] = self.df.iloc[:, 25] - self.df.iloc[:, 27]
+        vector_df['l_forearm'] = self.raw_df.iloc[:, 15] - self.raw_df.iloc[:, 13]
+        vector_df['l_upperarm'] = self.raw_df.iloc[:, 13] - self.raw_df.iloc[:, 11]
+        vector_df['l_flank'] = self.raw_df.iloc[:, 11] - self.raw_df.iloc[:, 23]
+        vector_df['l_thigh'] = self.raw_df.iloc[:, 23] - self.raw_df.iloc[:, 25]
+        vector_df['l_shin'] = self.raw_df.iloc[:, 25] - self.raw_df.iloc[:, 27]
 
         # right side vectors
-        vector_df['r_forearm'] = self.df.iloc[:, 16] - self.df.iloc[:, 14]
-        vector_df['r_upperarm'] = self.df.iloc[:, 14] - self.df.iloc[:, 12]
-        vector_df['r_flank'] = self.df.iloc[:, 12] - self.df.iloc[:, 24]
-        vector_df['r_thigh'] = self.df.iloc[:, 24] - self.df.iloc[:, 26]
-        vector_df['r_shin'] = self.df.iloc[:, 26] - self.df.iloc[:, 28]
+        vector_df['r_forearm'] = self.raw_df.iloc[:, 16] - self.raw_df.iloc[:, 14]
+        vector_df['r_upperarm'] = self.raw_df.iloc[:, 14] - self.raw_df.iloc[:, 12]
+        vector_df['r_flank'] = self.raw_df.iloc[:, 12] - self.raw_df.iloc[:, 24]
+        vector_df['r_thigh'] = self.raw_df.iloc[:, 24] - self.raw_df.iloc[:, 26]
+        vector_df['r_shin'] = self.raw_df.iloc[:, 26] - self.raw_df.iloc[:, 28]
 
         # other cuts
-        vector_df['hips'] = self.df.iloc[:, 24] - self.df.iloc[:, 23]
-        vector_df['shoulders'] = self.df.iloc[:, 12] - self.df.iloc[:, 11]
-        vector_df['nose_left'] = self.df.iloc[:, 0] - self.df.iloc[:, 11]
-        vector_df['nose_right'] = self.df.iloc[:, 0] - self.df.iloc[:, 12]
+        vector_df['hips'] = self.raw_df.iloc[:, 24] - self.raw_df.iloc[:, 23]
+        vector_df['shoulders'] = self.raw_df.iloc[:, 12] - self.raw_df.iloc[:, 11]
+        vector_df['nose_left'] = self.raw_df.iloc[:, 0] - self.raw_df.iloc[:, 11]
+        vector_df['nose_right'] = self.raw_df.iloc[:, 0] - self.raw_df.iloc[:, 12]
 
         # Convert into multi_index
         result = []
@@ -124,29 +116,36 @@ class PoseCalculations:
                 for x in df.columns
             ], axis=1)
 
-        self.expanded_df = expand_df(self.df)
+        self.expanded_df = expand_df(self.raw_df)
 
         n_temp = self.expanded_df.shape[0] // frames_per_pose
         # print("KJDBSKJBDS", n_temp)
         kmeans = KMeans(n_clusters=n_temp).fit(self.expanded_df)
         labels = np.array(kmeans.labels_)
         label_count = np.array([(labels == i).sum() for i in range(kmeans.n_clusters)])
-        extracted_poses = kmeans.cluster_centers_[np.where(label_count > min_frames)]
+        
+        # Save indices
+        self.pose_idx = np.where(label_count > min_frames)[0]
+        print(self.pose_idx)
 
-        # Repackage in dataframe
-        #############CHANGED THIS TO EXPANDED MUST CHECK AGAIN _________________!
-        self.poses = pd.DataFrame(extracted_poses, columns=self.expanded_df.columns)
+    def get_key_poses(self, raw=False):
+        if raw:
+            return self.raw_df.iloc[self.pose_idx,:]
+        else:
+            return self.normalized_df.iloc[self.pose_idx,:]
 
 
-# if __name__ == '__main__':
-#     df = pd.read_csv("landmark_frame_data.csv").drop(columns = ['Unnamed: 0'])
-#     strToArr = lambda s: np.array(
-#         [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]])
-#     df = df.applymap(strToArr)
-#     pc = PoseCalculations(df)
-#     test_df = pc.process_file()
-#     pca_transform = pc.trainer_pca_transformer()
-#     key_poses = pc.extract_key_poses()
-#
-#     for i, pose in test_df.iterrows():
-#         print(PoseCalculations.compare_poses(key_poses.iloc[0, :], pose, transform=pca_transform))
+
+if __name__ == '__main__':
+    df = pd.read_csv("landmark_data_tennis.csv").drop(columns="Unnamed: 0")
+    pc = PoseCalculations(df)
+    test_df = pc.process_file()
+    pca_transform = pc.trainer_pca_transformer()
+    pc.extract_key_poses()
+    key_poses = pc.get_key_poses()
+
+    key_poses_raw = pc.get_key_poses(raw=True)
+    print(key_poses_raw)
+
+    for i, pose in test_df.iterrows():
+        print(PoseCalculations.compare_poses(key_poses.iloc[0, :], pose, transform=pca_transform))
