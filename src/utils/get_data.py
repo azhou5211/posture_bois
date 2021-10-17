@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 class LabelExtractor:
-    def __init__(self, input_file_path, show_frames=False):
+    def __init__(self, input_file_path=None, show_frames=False):
         self.input_file_path = input_file_path
         self.df = None
         self.flag_show_frame = show_frames

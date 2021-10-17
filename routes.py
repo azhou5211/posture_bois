@@ -1,12 +1,15 @@
 from flask import session, request, redirect, url_for, flash, Flask, render_template, render_template_string, Response
 from app import app, ALLOWED_EXTENSIONS
 import mediapipe as mp
+import pandas as pd
 import os
 import cv2
 from werkzeug.utils import secure_filename
 from src.utils.get_data import LabelExtractor
 from src.utils.pose_calculations import PoseCalculations
 
+le_parent = LabelExtractor()
+pc_parent = PoseCalculations()
 
 def track_video():
 
@@ -18,6 +21,7 @@ def track_video():
 
     ## Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        pose_iterator = 0
         while cap.isOpened():
             ret, frame = cap.read()
             
@@ -32,21 +36,32 @@ def track_video():
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             
-    # Extract landmarks
+            # Extract landmarks
             if results.pose_landmarks:
                 landmarks = results.pose_landmarks.landmark
                 # print(landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x)
                 row = []
                 for id, lm in enumerate(results.pose_landmarks.landmark):
                     row.append((lm.x, lm.y, lm.z, lm.visibility))
-            landmarks_data.append(row)
-            #### landmarks_data should be sent to be analyzed.
+                landmarks_data.append(row)
+
+            pc_student = PoseCalculations(data = pd.DataFrame(landmarks_data))
+
+            # le_student = LabelExtractor(None)
+            pc_student.process_file()
+
+
+            if pc_parent.poses is not None and pc_student.normalized_df is not None:
+                comparison = PoseCalculations.compare_poses(pc_parent.poses.iloc[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
+                print(comparison)
+                if comparison > 0.85:
+                    pose_iterator+=1
         
             # Render detections
             mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                     mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                     mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
-                                        )               
+                                    )               
             
             cv2.imwrite('t.jpg', image)
 
@@ -84,10 +99,16 @@ def posture_matching():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             # TODO: Extract data here and call function for pose
-            le = LabelExtractor('uploads/' + filename)
-            le.extract_landmarks()
-            pc = PoseCalculations(le.df)
-            pc.process_file()
+            le_parent.input_file_path = "uploads/"+filename
+            le_parent.extract_landmarks()
+
+            pc_parent.df = le_parent.df
+            pc_parent.process_file()
+            pc_parent.trainer_pca_transformer()
+            pc_parent.extract_key_poses()
+
+            #### print knn poses on the carousel 
+
 
             return render_template("trainer.html", success="File successfully uploaded")
         else:

@@ -7,13 +7,17 @@ import numpy as np
 
 class PoseCalculations:
     # this is a class containing various functions to do with positioning
-    def __init__(self, data) -> None:
+    def __init__(self, data=None) -> None:
         self.df = data
         self.normalized_df = None
+        self.pca_model = None
+        self.poses = None
+        self.expanded_df = None
 
     # IN: filePath = path to csv file
     # OUT: DataFrame with rows as frames of video, columns multiindex by vector name and dimensions. Eg l_forearm -> x, y, z 
     def process_file(self):
+
         # raw_data = pd.read_csv(filePath).drop(columns = ['Unnamed: 0'])
         # raw_data = self.df.copy()
 
@@ -21,12 +25,17 @@ class PoseCalculations:
         # strToArr = lambda s: np.array(
         #     [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]])
         # self.parsed_data = raw_data.applymap(strToArr)
+        # print("First Check", self.df)
+
         strToArr = lambda s: np.array([float(k) for k in s[0:3]])
         self.df = self.df.applymap(strToArr)
+
+        print("SELFFF:", self.df)
 
         # Convert to vectors
         vectorDf = self.points_to_vectors()
 
+        # print("VECTORRRR:",vectorDf)
         # Normalize
         self.normalized_df = self.normalize(vectorDf)
         return self.normalized_df
@@ -40,7 +49,7 @@ class PoseCalculations:
         # vector_df['time'] = self.parsed_data['time']
 
         # indicies are hardcoded based on adjacent points
-
+        print("STUDENT :", self.df)
         # left side vectors
         vector_df['l_forearm'] = self.df.iloc[:, 15] - self.df.iloc[:, 13]
         vector_df['l_upperarm'] = self.df.iloc[:, 13] - self.df.iloc[:, 11]
@@ -89,7 +98,7 @@ class PoseCalculations:
         n = min(np.where(cumulative_total >= target_variance)[0])
 
         # Package into func
-        return lambda x: pca.transform([x])[:, :n]
+        self.pca_model = lambda x: pca.transform([x])[:, :n]
 
     # function that compares two vectors using cosine similarity
     @staticmethod
@@ -107,16 +116,26 @@ class PoseCalculations:
 
     # KNN for identifying trainer's important poses
     def extract_key_poses(self, frames_per_pose=10, min_frames=5):
-        if self.normalized_df is None:
-            raise Exception("Must normalize data before extracting key poses")
+        # if self.normalized_df is None:
+        #     raise Exception("Must normalize data before extracting key poses")
+        def expand_df(df):
+            return pd.concat([
+                pd.DataFrame(df[x].to_list())
+                for x in df.columns
+            ], axis=1)
 
-        kmeans = KMeans(n_clusters=len(self.normalized_df) // frames_per_pose).fit(self.normalized_df)
+        self.expanded_df = expand_df(self.df)
+
+        n_temp = self.expanded_df.shape[0] // frames_per_pose
+        # print("KJDBSKJBDS", n_temp)
+        kmeans = KMeans(n_clusters=n_temp).fit(self.expanded_df)
         labels = np.array(kmeans.labels_)
         label_count = np.array([(labels == i).sum() for i in range(kmeans.n_clusters)])
         extracted_poses = kmeans.cluster_centers_[np.where(label_count > min_frames)]
 
         # Repackage in dataframe
-        return pd.DataFrame(extracted_poses, columns=self.normalized_df.columns)
+        #############CHANGED THIS TO EXPANDED MUST CHECK AGAIN _________________!
+        self.poses = pd.DataFrame(extracted_poses, columns=self.expanded_df.columns)
 
 
 # if __name__ == '__main__':
