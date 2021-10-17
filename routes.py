@@ -102,7 +102,7 @@ def posture_matching():
             le_parent.input_file_path = "uploads/"+filename
             le_parent.extract_landmarks()
 
-            pc_parent.df = le_parent.df
+            pc_parent.raw_df = le_parent.df
             pc_parent.process_file()
             pc_parent.trainer_pca_transformer()
             pc_parent.extract_key_poses()

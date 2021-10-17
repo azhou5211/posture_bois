@@ -18,10 +18,15 @@ class PoseCalculations:
     # OUT: DataFrame with rows as frames of video, columns multiindex by vector name and dimensions. Eg l_forearm -> x, y, z 
     def process_file(self):
 
-        strToArr = strToArr = lambda s: np.array(
-            [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]]
-        )
-        self.raw_df = self.raw_df.applymap(strToArr)
+        print(self.raw_df)
+
+        # strToArr = lambda s: np.array(
+        #     [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')[0:3]]
+        # )
+        # self.raw_df = self.raw_df.applymap(strToArr)
+
+        # To numpy
+        self.raw_df = self.raw_df.applymap(lambda x: np.array(x)[0:3])
 
         # Convert to vectors
         vectorDf = self.points_to_vectors()
