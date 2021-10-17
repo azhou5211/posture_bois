@@ -65,7 +65,7 @@ def track_video():
                     print(pc_parent.get_key_poses().iloc[pose_iterator, :])
                     print(pc_student.normalized_df.shape)
                     print(pc_student.normalized_df)
-                    comparison = PoseCalculations.compare_poses(pc_parent.get_key_poses().iloc[pose_iterator, :], pc_student.normalized_df, transform=pc_parent.pca_model)
+                    comparison = PoseCalculations.compare_poses(pc_parent.get_key_poses().iloc[pose_iterator, :], pc_student.normalized_df.iloc[0,:], transform=pc_parent.pca_model)
                     print(comparison)
                     if comparison > 0.85:
                         pose_iterator+=1
