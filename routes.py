@@ -33,6 +33,10 @@ def track_video():
             
             # Recolor image to RGB
             image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+            #change this if it doesn't flip the image right
+            image = cv2.flip(image,1)
+
             image.flags.writeable = False
             
             # Make detection
