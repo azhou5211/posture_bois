@@ -97,6 +97,7 @@ class PoseCalculations:
     # function that compares two vectors using cosine similarity
     @staticmethod
     def cosine_sim(vec1, vec2):
+        print(vec1, vec2)
         return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
 
     # This function compares the goal pose(trainer's) to the students current pose
@@ -105,7 +106,7 @@ class PoseCalculations:
         if transform:
             teacher_pose = transform(teacher_pose)[0]
             student_pose = transform(student_pose)[0]
-
+        print(student_pose)
         return PoseCalculations.cosine_sim(teacher_pose, student_pose)
 
     # KNN for identifying trainer's important poses

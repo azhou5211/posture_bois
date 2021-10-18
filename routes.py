@@ -17,8 +17,6 @@ def track_video():
     mp_pose = mp.solutions.pose
 
     cap = cv2.VideoCapture(0)
-    landmarks_data = []
-
     ## Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         pose_iterator = 0
@@ -48,25 +46,23 @@ def track_video():
 
 
                     #print('RRRRRRRRRRow:', row)
-                landmarks_data.append(row)
+                # print(landmarks_data)
 
-                pc_student = PoseCalculations(data = pd.DataFrame(landmarks_data))
+                pc_student = PoseCalculations(data = pd.DataFrame([row]))
 
                 # le_student = LabelExtractor(None)
                 pc_student.process_file()
 
-                # le_student = LabelExtractor(None)
-                #print("check on route1:", pc_student.df)
-                pc_student.process_file()
                 # print("check on route1:", pc_student.df)
 
                 if pc_parent.pose_idx is not None and pc_student.normalized_df is not None:
-                    print(pc_parent.get_key_poses().iloc[pose_iterator, :].shape)
-                    print(pc_parent.get_key_poses().iloc[pose_iterator, :])
-                    print(pc_student.normalized_df.shape)
-                    print(pc_student.normalized_df)
-                    comparison = PoseCalculations.compare_poses(pc_parent.get_key_poses().iloc[pose_iterator, :], pc_student.normalized_df.iloc[0,:], transform=pc_parent.pca_model)
-                    print(comparison)
+                    # print(pc_parent.get_key_poses().iloc[pose_iterator, :].shape)
+                    trainer_poses = pc_parent.get_key_poses().iloc[pose_iterator, :]
+                    # print(trainer_poses)
+                    # print(pc_student.normalized_df.shape)
+                    # print(pc_student.normalized_df)
+                    comparison = PoseCalculations.compare_poses(trainer_poses, pc_student.normalized_df.iloc[0,:], transform=pc_parent.pca_model)
+                    print("COMPARISON VALUE----->", pose_iterator, comparison)
                     if comparison > 0.85:
                         pose_iterator+=1
             
