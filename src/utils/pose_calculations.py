@@ -97,7 +97,6 @@ class PoseCalculations:
     # function that compares two vectors using cosine similarity
     @staticmethod
     def cosine_sim(vec1, vec2):
-        print(vec1, vec2)
         return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
 
     # This function compares the goal pose(trainer's) to the students current pose
@@ -106,7 +105,6 @@ class PoseCalculations:
         if transform:
             teacher_pose = transform(teacher_pose)[0]
             student_pose = transform(student_pose)[0]
-        print(student_pose)
         return PoseCalculations.cosine_sim(teacher_pose, student_pose)
 
     # KNN for identifying trainer's important poses
@@ -138,16 +136,16 @@ class PoseCalculations:
 
 
 
-if __name__ == '__main__':
-    df = pd.read_csv("landmark_data_tennis.csv").drop(columns="Unnamed: 0")
-    pc = PoseCalculations(df)
-    test_df = pc.process_file()
-    pca_transform = pc.trainer_pca_transformer()
-    pc.extract_key_poses()
-    key_poses = pc.get_key_poses()
+# if __name__ == '__main__':
+#     df = pd.read_csv("landmark_data_tennis.csv").drop(columns="Unnamed: 0")
+#     pc = PoseCalculations(df)
+#     test_df = pc.process_file()
+#     pca_transform = pc.trainer_pca_transformer()
+#     pc.extract_key_poses()
+#     key_poses = pc.get_key_poses()
 
-    key_poses_raw = pc.get_key_poses(raw=True)
-    print(key_poses_raw)
+#     key_poses_raw = pc.get_key_poses(raw=True)
+#     print(key_poses_raw)
 
-    for i, pose in test_df.iterrows():
-        print(PoseCalculations.compare_poses(key_poses.iloc[0, :], pose, transform=pca_transform))
+#     for i, pose in test_df.iterrows():
+#         print(PoseCalculations.compare_poses(key_poses.iloc[0, :], pose, transform=pca_transform))

@@ -7,16 +7,24 @@ import cv2
 from werkzeug.utils import secure_filename
 from src.utils.get_data import LabelExtractor
 from src.utils.pose_calculations import PoseCalculations
+from PIL import Image
 
 le_parent = LabelExtractor()
 pc_parent = PoseCalculations()
 
 def track_video():
 
+    win = False
     mp_drawing = mp.solutions.drawing_utils
     mp_pose = mp.solutions.pose
 
     cap = cv2.VideoCapture(0)
+
+    # white_bkg_img = Image.new('RGB', (200, 50), color = (255,255,255))
+    # first_pose = pc_parent.get_key_poses().iloc[0, :]
+    # mp_drawing.draw_landmarks(white_bkg_img, first_pose, mp_pose.POSE_CONNECTIONS, mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2))
+    # cv2.imwrite('pose.jpg', white_bkg_img)
+
     ## Setup mediapipe instance
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         pose_iterator = 0
@@ -57,27 +65,38 @@ def track_video():
 
                 if pc_parent.pose_idx is not None and pc_student.normalized_df is not None:
                     # print(pc_parent.get_key_poses().iloc[pose_iterator, :].shape)
-                    trainer_poses = pc_parent.get_key_poses().iloc[pose_iterator, :]
-                    # print(trainer_poses)
-                    # print(pc_student.normalized_df.shape)
-                    # print(pc_student.normalized_df)
+                    try:
+                        trainer_poses = pc_parent.get_key_poses().iloc[pose_iterator, :]
+                    except:
+                        win = True
+                        print("WIN!")
+                        break
+                        #RETURN RENDER TEMPLATE WELL DONE!
+
                     comparison = PoseCalculations.compare_poses(trainer_poses, pc_student.normalized_df.iloc[0,:], transform=pc_parent.pca_model)
-                    print("COMPARISON VALUE----->", pose_iterator, comparison)
+                    # print("COMPARISON VALUE----->", pose_iterator, comparison)
                     if comparison > 0.85:
                         pose_iterator+=1
+                        
             
                 # Render detections
                 mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                         mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
                                         mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                         )               
-                
+                comparison_disp = comparison * 100
+                cv2.putText(image, f'{comparison_disp:.0f}', (70,50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
                 cv2.imwrite('t.jpg', image)
 
                 yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
+
+                if win==True:
+                    break
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             
+            if win==True:
+                break
     cap.release()
     cv2.destroyAllWindows()
 
