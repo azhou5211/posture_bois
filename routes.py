@@ -89,7 +89,9 @@ def track_video():
                                         mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
                                         )               
                 comparison_disp = comparison * 100
+
                 cv2.putText(image, f'{comparison_disp:.0f}', (70,50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+                cv2.putText(image, f'{pose_iterator:.0f}', (240,50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
                 cv2.imwrite('t.jpg', image)
 
                 yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
