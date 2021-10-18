@@ -5,9 +5,9 @@ import pandas as pd
 import os
 import cv2
 from werkzeug.utils import secure_filename
-from src.utils.get_data import LabelExtractor
-from src.utils.pose_calculations import PoseCalculations
 from PIL import Image
+from src.posture_bois.utils.get_data import LabelExtractor
+from src.posture_bois.utils.pose_calculations import PoseCalculations
 
 le_parent = LabelExtractor()
 pc_parent = PoseCalculations()
