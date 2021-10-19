@@ -18,6 +18,41 @@ Our program designed with a two-part interface that clearly defines the section 
 
 Our program is separated into two main portions. We have the Trainer's side and the Learner's side. The Trainers side is where either the user can upload a video of the 'proper' way of performing an exercise. Once the video is analyzed, the user can move into the Learner's side and attempt to imitate the action in the video in front of their camera. Our program will then analyze the user's movements and compare them to that of the "Trainer's" and provide feedback in real time about how similar the forms are. 
 
+## Try it out!!
+
+## Installation and Setup
+
+**<ins>Quick Info</ins>**  
+
+* Testing was implemented mainly on our 'modules' folder where we have all of our back-end source code. 
+* For testing we excluded files from our 'app' folder as it consisted mainly of HTML templates. We did not implement testing on routes.py.
+* We have achieved a 100% coverage using unit tests for all our back-end python files. This can be seen in our coverage reports and Codecov.
+* You may choose to run the app locally or via the website link.
+
+**<ins>Installation</ins>**  
+
+This tutorial will allow you to run the code locally on your own machine!  
+*It is recommended that you create a new conda environment (if you have conda) or a new virtual environment before installation.*
+
+1) Clone the git repository to your local machine and change directory to recipeat
+```
+git clone https://github.com/smuktevi/posture_bois.git
+cd posture_bois
+```
+2) Install required packages and dependecies. This installs dependencies from our `requirements.txt` file.
+```
+pip install -r requirements.txt .
+```
+3) You're ready to start running our app locally!  
+
+* Use flask run to run our web app locally.
+```
+flask run
+```
+
+Let us know what you think!
+
+
 ## Our Story
 
 Our team was inspired to come together by a love of sports and going to the gym. Some of us have gotten injured from performing various exercises and it would prevent us from going to the gym again until we healed. And even after we healed, the effects of the injury were still there. Because of our lack of experience with different exercises, this kind of thing would happen often. We realized many people were in a similar situation: they wanted to be healthy and fit, but a lack of experience would constantly hinder progress and discourage people from performing more complicated exercises.    
