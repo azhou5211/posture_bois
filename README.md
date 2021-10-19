@@ -1,4 +1,7 @@
-# Posture Bois
+# FixForm
+
+![Fix Form](https://github.com/smuktevi/posture_bois/blob/main/FixFormLogo.png)
+
 A project for fun.
 
 Many people want to work out or get better at sports. But finding the time or money for a personal trainer or a coach is not always easy. Our program works to adjust your posture and positioning in real time for almost any workout or sport based on a video upload. We aim to make the benefits of having personal trainers accessible to everyone!
@@ -23,7 +26,7 @@ The worst instance of this happening was when one of our teammates got a hernia 
 
 This is our team! You can tell we had a lot of fun on this project. There's also a lot of Costco pizza and coffee that we couldn't add to this picture lol.
 
-![Posture Bois](https://github.com/smuktevi/posture_bois/blob/main/MicrosoftTeams-image%20(2).png)]
+![Posture Bois](https://github.com/smuktevi/posture_bois/blob/main/MicrosoftTeams-image%20(2).png)
 
 ## Resources
 
