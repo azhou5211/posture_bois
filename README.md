@@ -13,6 +13,8 @@ Many people want to work out or get better at sports. But finding the time or mo
   
 If you want to work out like Arnold Schwarzenegger then all you need to do is upload a video of him doing your favorite exercise, then perform it yourself through our app and viola! You’ll instantly see how close your form is to his. The same applies for sports. Want to serve like Roger Federer? Upload a video of him serving, then practice your serving in front of our app until you serve like a champion!
 
+[Check out our video presentation!](https://drive.google.com/file/d/1Yh4sf_FTUV01RBUDgTYsplcIuCR79uN4/view?usp=sharing)
+
 ## Design
 
 Our app is meant to be simple and able to be used by a variety of people. Anyone who wants to imitate a professional athlete or weightlifter would be able to derive some use from the program. We hope to help people by ensuring that they are moving their bodies in a way that provides the least negative impact on them while they train or play sports. The right technique over many years can mean the difference between a sore body with knee/elbow braces and a healthy, pain-free body.  
