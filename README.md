@@ -35,7 +35,7 @@ cd posture_bois
 ```
 2) Install required packages and dependecies. This installs dependencies from our `requirements.txt` file.
 ```
-pip install -r requirements.txt .
+pip install -r requirements.txt
 ```
 3) You're ready to start running our app locally!  
 
