@@ -15,6 +15,7 @@ pandas
 flask
 flask_restful
 httpie
-opencv-python
+# opencv-python
+opencv-python-headless==4.5.1.48
 mediapipe
 PyYAML
