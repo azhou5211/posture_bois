@@ -107,7 +107,7 @@ class PoseCalculations:
             student_pose = transform(student_pose)[0]
         return PoseCalculations.cosine_sim(teacher_pose, student_pose)
 
-    # KNN for identifying trainer's important poses
+    # KMeans for identifying trainer's important poses
     def extract_key_poses(self, frames_per_pose=10, min_frames=5):
         # if self.normalized_df is None:
         #     raise Exception("Must normalize data before extracting key poses")
@@ -123,10 +123,29 @@ class PoseCalculations:
         # print("KJDBSKJBDS", n_temp)
         kmeans = KMeans(n_clusters=n_temp).fit(self.expanded_df)
         labels = np.array(kmeans.labels_)
-        label_count = np.array([(labels == i).sum() for i in range(kmeans.n_clusters)])
-        
-        # Save indices
-        self.pose_idx = np.where(label_count > min_frames)[0]
+
+        # Relabel re-hits of poses
+        max_label = max(labels) 
+        prev_label = labels[0]
+        visited_labels = {}
+        for i in range(1,len(labels)):
+            if labels[i] != prev_label and labels[i] in visited_labels:
+                if prev_label != max_label:
+                    max_label = max_label + 1
+                labels[i] = max_label
+            elif labels[i] not in visited_labels:
+                visited_labels[labels[i]] = 1
+
+            prev_label = labels[i]
+  
+        # Get middle index of each cluster 
+        label_count = np.array([(labels == i).sum() for i in range(max(labels))])
+        good_labels = np.where(label_count > min_frames)[0]
+        pose_idx = []
+        for i in good_labels:
+            idx = np.where(labels == i)[0]
+            pose_idx.append(idx[len(idx)//2])
+        self.pose_idx = sorted(pose_idx)
 
     def get_key_poses(self, raw=False):
         if raw:
@@ -136,16 +155,20 @@ class PoseCalculations:
 
 
 
-# if __name__ == '__main__':
-#     df = pd.read_csv("landmark_data_tennis.csv").drop(columns="Unnamed: 0")
-#     pc = PoseCalculations(df)
-#     test_df = pc.process_file()
-#     pca_transform = pc.trainer_pca_transformer()
-#     pc.extract_key_poses()
-#     key_poses = pc.get_key_poses()
+if __name__ == '__main__':
+    df = pd.read_csv("landmark_data_tennis.csv").drop(columns="Unnamed: 0")
+    strToArr = lambda s: np.array(
+            [float(k) for k in s.replace("(", "").replace(")", '').replace(" ", "").split(',')]
+        )
+    df = df.applymap(strToArr)
+    pc = PoseCalculations(df)
+    test_df = pc.process_file()
+    pca_transform = pc.trainer_pca_transformer()
+    pc.extract_key_poses()
+    key_poses = pc.get_key_poses()
 
-#     key_poses_raw = pc.get_key_poses(raw=True)
-#     print(key_poses_raw)
+    key_poses_raw = pc.get_key_poses(raw=True)
+    #print(key_poses_raw)
 
-#     for i, pose in test_df.iterrows():
-#         print(PoseCalculations.compare_poses(key_poses.iloc[0, :], pose, transform=pca_transform))
+    for i, pose in test_df.iterrows():
+        print(PoseCalculations.compare_poses(key_poses.iloc[0, :], pose, transform=pca_transform))
