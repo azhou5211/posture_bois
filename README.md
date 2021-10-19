@@ -1,6 +1,8 @@
 # FixForm
 
-![Fix Form](https://github.com/smuktevi/posture_bois/blob/main/FixFormLogo.png)
+<p align="center">
+  <img src="https://github.com/smuktevi/posture_bois/blob/main/FixFormLogo.png" />
+</p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
 **By: Sai Muktevi, Samuel Perebikovsky, Caleb Case, Andrew Zhou**
@@ -57,7 +59,9 @@ The worst instance of this happening was when one of our teammates got a hernia 
 
 This is our team! You can tell we had a lot of fun on this project. There's also a lot of Costco pizza and coffee that we couldn't add to this picture lol.
 
-![Posture Bois](https://github.com/smuktevi/posture_bois/blob/main/MicrosoftTeams-image%20(2).png)
+<p align="center">
+  <img src="https://github.com/smuktevi/posture_bois/blob/main/MicrosoftTeams-image%20(2).png" />
+</p>
 
 ## Resources
 
