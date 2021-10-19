@@ -13,7 +13,8 @@ Many people want to work out or get better at sports. But finding the time or mo
   
 If you want to work out like Arnold Schwarzenegger then all you need to do is upload a video of him doing your favorite exercise, then perform it yourself through our app and viola! You’ll instantly see how close your form is to his. The same applies for sports. Want to serve like Roger Federer? Upload a video of him serving, then practice your serving in front of our app until you serve like a champion!
 
-[Check out our video presentation!](https://drive.google.com/file/d/1Yh4sf_FTUV01RBUDgTYsplcIuCR79uN4/view?usp=sharing)
+* [Check out our video presentation!](https://drive.google.com/file/d/1Yh4sf_FTUV01RBUDgTYsplcIuCR79uN4/view?usp=sharing)
+* [Slides](https://docs.google.com/presentation/d/1HNU_Fb5pu59XSvDDZdHrPSpR00CsaOtrz9RfReMHX4E/edit?usp=sharing)
 
 ## Design
 
