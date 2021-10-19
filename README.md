@@ -25,8 +25,6 @@ Our program is separated into two main portions. We have the Trainer's side and 
 
 ## Try it out!!
 
-## Installation and Setup
-
 This tutorial will allow you to run the code locally on your own machine!  
 *It is recommended that you create a new conda environment (if you have conda) or a new virtual environment before installation.*
 
