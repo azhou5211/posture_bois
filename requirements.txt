@@ -15,8 +15,6 @@ pandas
 flask
 flask_restful
 httpie
-torch-cpu
-torchvision-cpu
 opencv-python
 mediapipe
 PyYAML
