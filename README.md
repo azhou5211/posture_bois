@@ -2,6 +2,9 @@
 
 ![Fix Form](https://github.com/smuktevi/posture_bois/blob/main/FixFormLogo.png)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
+**By: Sai Muktevi, Samuel Perebikovsky, Caleb Case, Andrew Zhou**
+
 A project for fun. **Microsoft Student Hackathon 2021!**
 
 Many people want to work out or get better at sports. But finding the time or money for a personal trainer or a coach is not always easy. Our program works to adjust your posture and positioning in real time for almost any workout or sport based on a video upload. We aim to make the benefits of having personal trainers accessible to everyone!  
