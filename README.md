@@ -22,15 +22,6 @@ Our program is separated into two main portions. We have the Trainer's side and 
 
 ## Installation and Setup
 
-**<ins>Quick Info</ins>**  
-
-* Testing was implemented mainly on our 'modules' folder where we have all of our back-end source code. 
-* For testing we excluded files from our 'app' folder as it consisted mainly of HTML templates. We did not implement testing on routes.py.
-* We have achieved a 100% coverage using unit tests for all our back-end python files. This can be seen in our coverage reports and Codecov.
-* You may choose to run the app locally or via the website link.
-
-**<ins>Installation</ins>**  
-
 This tutorial will allow you to run the code locally on your own machine!  
 *It is recommended that you create a new conda environment (if you have conda) or a new virtual environment before installation.*
 
