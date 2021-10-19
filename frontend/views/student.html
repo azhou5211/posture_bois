@@ -2,33 +2,31 @@
 
 {% block content %}
 
-<html>
 <head>
     <title>Video Streaming </title>
 </head>
+
 <body>
     <h1>Ready to Train?</h1>
-    <h3>The numbers on the top left indicate a score on how close you are to the trainer and the number of stages of the exercise or movement you are trying to do in that order.</h3>
+    <h2 style="color: aqua;">The numbers on the top left indicate a score on how close you are to the trainer and the
+        number of stages of the exercise or movement you are trying to do in that order.</h2>
     <div>
         <h1>Let's Go!</h1>
         <img id="img" src="{{ url_for('video_feed') }}">
     </div>
-    <!-- <div>
-        <h1>Canvas</h1>
-        <canvas id="canvas" width="640px" height="480px"></canvas>
-    </div> -->
 
-<script >
-    var ctx = document.getElementById("canvas").getContext('2d');
-    var img = new Image();
-    img.src = "{{ url_for('video_feed') }}";
 
-    function refreshCanvas(){
-        ctx.drawImage(img, 0, 0);
-    };
-    window.setInterval("refreshCanvas()", 50);
+    <script>
+        var ctx = document.getElementById("canvas").getContext('2d');
+        var img = new Image();
+        img.src = "{{ url_for('video_feed') }}";
 
-</script>
+        function refreshCanvas() {
+            ctx.drawImage(img, 0, 0);
+        };
+        window.setInterval("refreshCanvas()", 50);
+
+    </script>
 
 </body>
 

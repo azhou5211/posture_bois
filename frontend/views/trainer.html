@@ -5,43 +5,42 @@
 <h1>Welcome Trainer!</h1>
 
 <style>
-#pageloader
-{
-  background: rgba( 255, 255, 255, 0.8 );
-  display: none;
-  height: 100%;
-  position: fixed;
-  width: 100%;
-  z-index: 9999;
-}
+  #pageloader {
+    background: rgba(255, 255, 255, 0.8);
+    display: none;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+  }
 
-#pageloader img
-{
-  left: 50%;
-  margin-left: -32px;
-  margin-top: -32px;
-  position: absolute;
-  top: 50%;
-}
+  #pageloader img {
+    left: 50%;
+    margin-left: -32px;
+    margin-top: -32px;
+    position: absolute;
+    top: 50%;
+  }
 </style>
 <script>
-    $(document).ready(function(){
-  $("#myform").on("submit", function(){
-    $("#pageloader").fadeIn();
-  });//submit
-});//document ready
+  $(document).ready(function () {
+    $("#myform").on("submit", function () {
+      $("#pageloader").fadeIn();
+    });//submit
+  });//document ready
 </script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <div id="pageloader">
-   <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
+  <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
 </div>
 
+
 {% if error %}
-        <div class="alert alert-danger">
-            {{ error }}
-        </div>
+<div class="alert alert-danger">
+  {{ error }}
+</div>
 {% endif %}
 
 <form action="" method="post" enctype="multipart/form-data" id="myform">
@@ -50,9 +49,9 @@
 </form>
 
 {% if success %}
-        <div class="alert alert-success">
-            {{ success }}. Head to the Learner tab!
-        </div>
+<div class="alert alert-success">
+  {{ success }}. Head to the Learner tab!
+</div>
 {% endif %}
 
 {% endblock %}

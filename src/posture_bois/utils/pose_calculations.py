@@ -107,7 +107,7 @@ class PoseCalculations:
             student_pose = transform(student_pose)[0]
         return PoseCalculations.cosine_sim(teacher_pose, student_pose)
 
-    # KNN for identifying trainer's important poses
+    # KMeans for identifying trainer's important poses
     def extract_key_poses(self, frames_per_pose=10, min_frames=5):
         # if self.normalized_df is None:
         #     raise Exception("Must normalize data before extracting key poses")
