@@ -2,7 +2,7 @@
 
 ![Fix Form](https://github.com/smuktevi/posture_bois/blob/main/FixFormLogo.png)
 
-A project for fun.
+A project for fun. **Microsoft Student Hackathon 2021!**
 
 Many people want to work out or get better at sports. But finding the time or money for a personal trainer or a coach is not always easy. Our program works to adjust your posture and positioning in real time for almost any workout or sport based on a video upload. We aim to make the benefits of having personal trainers accessible to everyone!
 If you want to work out like Arnold Schwarzenegger then all you need to do is upload a video of him doing your favorite exercise, then perform it yourself through our app and viola! You’ll instantly see how close your form is to his. The same applies for sports. Want to serve like Roger Federer? Upload a video of him serving, then practice your serving in front of our app until you serve like a champion!
