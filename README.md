@@ -24,7 +24,7 @@ Our program designed with a two-part interface that clearly defines the section 
 
 ## How it works!
 
-Our program is separated into two main portions. We have the Trainer's side and the Learner's side. The Trainers side is where either the user can upload a video of the 'proper' way of performing an exercise. Once the video is analyzed, the user can move into the Learner's side and attempt to imitate the action in the video in front of their camera. Our program will then analyze the user's movements and compare them to that of the "Trainer's" and provide feedback in real time about how similar the forms are. 
+Our program is separated into two main portions. We have the Trainer's side and the Learner's side. The Trainers side is where the user can upload a video of the 'proper' way of performing an exercise. Once the video is analyzed, the user can move into the Learner's side and attempt to imitate the action in the video in front of their camera. Our program will then analyze the user's movements and compare them to that of the "Trainer's" and provide feedback in real time about how similar the forms are. 
 
 ## Try it out!!
 
